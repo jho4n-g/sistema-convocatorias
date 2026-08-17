@@ -13,6 +13,14 @@ export function AuthProvider({ children }) {
   }, []);
 
   const verificarSesion = async () => {
+    const token = localStorage.getItem('token');
+
+    // Si no existe token, simplemente es un usuario no autenticado
+    if (!token) {
+      setUsuario(null);
+      setLoading(false);
+      return;
+    }
     try {
       const response = await api.get('/usuario/auth/me');
       setUsuario(response.data.data);
