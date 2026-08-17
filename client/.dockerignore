@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+dist
+.git
+*.md
+.env
+build 
+build 
+.pnpm-store
+.gitignore
+pnpm-debug.log
+npm-debug.log
