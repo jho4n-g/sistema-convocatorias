@@ -235,7 +235,7 @@ export default function RegistroPostulantePage() {
             <button
               type="button"
               onClick={() => {
-                navigate('/convocatoria-detalle/2');
+                navigate(`/convocatoria-detalle/${id}`);
               }}
               className="text-left text-sm font-semibold text-emerald-800 transition hover:text-emerald-950 hover:underline sm:text-base"
             >

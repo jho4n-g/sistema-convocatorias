@@ -15,7 +15,7 @@ export default function DataTableLocal({
 
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 15,
   });
 
   const table = useReactTable({

@@ -36,42 +36,42 @@ export async function ConnectBD() {
     console.log('🌐 Conectando a la base de datos PostgreSQL...');
     await sequelize.authenticate();
     console.log('✅ Conexión OK');
-    //Modulo Auth
-    await permisoModel.sync();
-    await rolModel.sync();
-    await rolPermisoModel.sync();
-    await usuarioModel.sync({ alter: true });
-    await VerificarUsuarioModel.sync();
-    //
-    //
-    await centroMedicoModel.sync({ alter: true });
-    await servicioCentroModel.sync({ alter: true });
-    await personaAdminModel.sync({ alter: true });
-    //
-    await areaTrabajoModel.sync({ alter: true });
-    await cargoInstitucionalModel.sync({ alter: true });
-    //
-    await experienciaEspecifica.sync({ alter: true });
+    // //Modulo Auth
+    // await permisoModel.sync();
+    // await rolModel.sync();
+    // await rolPermisoModel.sync();
+    // await usuarioModel.sync({ alter: true });
+    // await VerificarUsuarioModel.sync();
+    // //
+    // //
+    // await centroMedicoModel.sync({ alter: true });
+    // await servicioCentroModel.sync({ alter: true });
+    // await personaAdminModel.sync({ alter: true });
+    // //
+    // await areaTrabajoModel.sync({ alter: true });
+    // await cargoInstitucionalModel.sync({ alter: true });
+    // //
+    // await experienciaEspecifica.sync({ alter: true });
 
-    await experienciaGeneralModel.sync({ alter: true });
-    //
-    await formacionAcademicaModel.sync({ alter: true });
-    await areaTrabajoFormacionAcademicaModel.sync({ alter: true });
-    //
-    await convocatoriaModel.sync({ alter: true });
-    //
-    await convocatoriaExperienciaEspecificaModel.sync({ alter: true });
-    await convocatoriaFormacionAcademicaModel.sync({ alter: true });
-    //persona
-    await nivelAcademicoModel.sync({ alter: true });
-    await personaModel.sync({ alter: true });
-    await formacionAcademicaPersonaModel.sync({ alter: true });
-    await experienciaLaboralModel.sync({ alter: true });
-    await potulacionModel.sync({ alter: true });
-    //
-    await DocumentoPostulacionFormacionAcademicaModel.sync({ alter: true });
+    // await experienciaGeneralModel.sync({ alter: true });
+    // //
+    // await formacionAcademicaModel.sync({ alter: true });
+    // await areaTrabajoFormacionAcademicaModel.sync({ alter: true });
+    // //
+    // await convocatoriaModel.sync({ alter: true });
+    // //
+    // await convocatoriaExperienciaEspecificaModel.sync({ alter: true });
+    // await convocatoriaFormacionAcademicaModel.sync({ alter: true });
+    // //persona
+    // await nivelAcademicoModel.sync({ alter: true });
+    // await personaModel.sync({ alter: true });
+    // await formacionAcademicaPersonaModel.sync({ alter: true });
+    // await experienciaLaboralModel.sync({ alter: true });
+    // await potulacionModel.sync({ alter: true });
+    // //
+    // await DocumentoPostulacionFormacionAcademicaModel.sync({ alter: true });
 
-    console.log('✅ Tablas cargadas correctamente');
+    // console.log('✅ Tablas cargadas correctamente');
   } catch (e) {
     console.error('❌ Error DB:', e.message);
     process.exit(1);

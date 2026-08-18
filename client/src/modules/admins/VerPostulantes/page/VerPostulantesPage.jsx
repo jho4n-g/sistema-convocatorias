@@ -19,7 +19,7 @@ export default function VerPostulantePage() {
 
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: 5,
+    limit: 20,
     totalItems: 0,
     totalPages: 1,
   });
@@ -86,7 +86,7 @@ export default function VerPostulantePage() {
         setPagination((prev) => ({
           ...prev,
           page: response?.page || prev.page,
-          totalItems: response?.totalItems || 0,
+          totalItems: response?.total || 0,
           totalPages: response?.totalPages || 1,
         }));
       }
