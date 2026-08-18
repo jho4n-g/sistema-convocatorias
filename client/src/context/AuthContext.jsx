@@ -12,6 +12,7 @@ export function AuthProvider({ children }) {
     verificarSesion();
   }, []);
 
+  // agregar al sistema
   const verificarSesion = async () => {
     const token = localStorage.getItem('token');
 
