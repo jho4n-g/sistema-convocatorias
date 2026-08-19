@@ -4,9 +4,10 @@ import { toast } from 'react-toastify';
 import DataTable from '../../../../components/DataTable';
 import { MODALS, useModalManager } from '../../../../hooks/userModalManager';
 import ConfirmModal from '../../../../components/ConfirmModal';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, data } from 'react-router-dom';
 
 import { VerPostulante as Servs } from '../verPostulantes.services';
+import { ConvocatoriaServices } from '../../convocatoria/convocatoria.services';
 import VerPostulantesModal from './VerPostulantesModal';
 
 export default function VerPostulantePage() {
@@ -14,6 +15,7 @@ export default function VerPostulantePage() {
   const [filas, setFila] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
+  const [tituloConvocatoria, setTituloConvocatoria] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -65,6 +67,15 @@ export default function VerPostulantePage() {
             >
               VER POSTULANTE
             </button>
+            <button
+              type="button"
+              className="rounded-xl bg-emerald-800 px-3 py-2 text-white hover:bg-emerald-900 border border-emerald-500"
+              onClick={() => {
+                openModal(MODALS.VIEW, row.original.id);
+              }}
+            >
+              CAMBIAR ESTADO
+            </button>
           </div>
         ),
       },
@@ -72,6 +83,23 @@ export default function VerPostulantePage() {
     [],
   );
 
+  const fetchTitulo = async () => {
+    try {
+      const response = await Servs.getIdTituloConvocatoria(id);
+      if (!response.ok) {
+        throw new Error(
+          response.message ||
+            'No se puede obtener el titulo de la convocatoria',
+        );
+      }
+      setTituloConvocatoria(
+        `${response?.data?.titulo_cargo} 
+        - ${response?.data?.cargo_institucional}`,
+      );
+    } catch (e) {
+      toast.error(error.message || 'Error al cargar datos');
+    }
+  };
   const fetchFilas = async () => {
     try {
       setLoading(true);
@@ -101,13 +129,16 @@ export default function VerPostulantePage() {
     }
   };
   useEffect(() => {
+    fetchTitulo();
+  }, []);
+  useEffect(() => {
     fetchFilas();
   }, [pagination.page, pagination.limit, searchInput]);
 
   return (
     <>
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-semibold">VER POSTULANTES</h2>
+        <h2 className="text-xl font-semibold">{`POSTULANTES: ${tituloConvocatoria}`}</h2>
         <button
           className="
             rounded-xl

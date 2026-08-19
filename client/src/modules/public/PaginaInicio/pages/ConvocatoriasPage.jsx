@@ -138,7 +138,7 @@ export default function ConvocatoriasPage() {
       <header className="border-b border-emerald-800 bg-emerald-900 text-white shadow-sm">
         <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
           <h1 className="text-2xl font-black tracking-wide transition hover:text-emerald-100 sm:text-3xl">
-            CAJA NACIONAL DE SALUD
+            CAJA NACIONAL DE SALUD - REGIONAL COCHABAMBA
           </h1>
           <button
             type="button"
@@ -210,7 +210,9 @@ export default function ConvocatoriasPage() {
         {/* INFORMACIÓN */}
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-xl font-bold text-slate-800">Convocatorias</h2>
+            <h2 className="text-xl font-bold text-slate-800">
+              CONVOCATORIAS - COCHABAMBA
+            </h2>
 
             {!loading && (
               <p className="mt-1 text-sm text-slate-500">

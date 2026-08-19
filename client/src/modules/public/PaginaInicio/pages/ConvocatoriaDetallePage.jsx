@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Form, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
@@ -15,12 +15,38 @@ import {
 
 import { ConvocatoriaServices as Servs } from '../PaginaInicio.services';
 
+const meses = {
+  enero: 0,
+  febrero: 1,
+  marzo: 2,
+  abril: 3,
+  mayo: 4,
+  junio: 5,
+  julio: 6,
+  agosto: 7,
+  septiembre: 8,
+  octubre: 9,
+  noviembre: 10,
+  diciembre: 11,
+};
+
+function convertirFechaEspañol(fechaStr) {
+  const partes = fechaStr.split(' de ');
+  const dia = parseInt(partes[0]); // 23
+  const mes = meses[partes[1].toLowerCase()]; // agosto -> 7
+  const año = parseInt(partes[2]); // 2026
+
+  return new Date(año, mes, dia);
+}
+
 export default function ConvocatoriaDetallePage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [convocatoria, setConvocatoria] = useState(null);
+
+  const hoy = new Date();
 
   useEffect(() => {
     const loadData = async () => {
@@ -34,6 +60,27 @@ export default function ConvocatoriaDetallePage() {
             response?.message || 'No se pudo cargar la convocatoria',
           );
         }
+        console.log('***************************');
+        console.log(response.data.fecha_cierre);
+        console.log(
+          convertirFechaEspañol(response.data.fecha_cierre).setHours(
+            0,
+            0,
+            0,
+            0,
+          ),
+        );
+        console.log(hoy.setHours(0, 0, 0, 0));
+
+        console.log(
+          convertirFechaEspañol(response.data.fecha_cierre).setHours(
+            0,
+            0,
+            0,
+            0,
+          ) <= hoy.setHours(0, 0, 0, 0),
+        );
+        console.log('***************************');
 
         setConvocatoria(response.data);
       } catch (error) {
@@ -78,7 +125,7 @@ export default function ConvocatoriaDetallePage() {
             onClick={() => navigate('/')}
             className="text-2xl font-black tracking-wide transition hover:text-emerald-100 sm:text-3xl"
           >
-            CAJA NACIONAL DE SALUD
+            CAJA NACIONAL DE SALUD - REGIONAL COCHABAMBA
           </button>
 
           <button
@@ -288,13 +335,23 @@ export default function ConvocatoriaDetallePage() {
           <aside className="self-start lg:sticky lg:top-6">
             <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
               <div className="border-t border-slate-100 bg-slate-50 p-6">
-                <button
-                  type="button"
-                  onClick={handlePostular}
-                  className="w-full rounded-xl bg-emerald-700 px-6 py-4 text-base font-bold text-white shadow-sm transition hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-700/20 active:scale-[0.99]"
-                >
-                  Postular ahora
-                </button>
+                {hoy.setHours(0, 0, 0, 0) <=
+                convertirFechaEspañol(convocatoria.fecha_cierre).setHours(
+                  0,
+                  0,
+                  0,
+                  0,
+                ) ? (
+                  <button
+                    type="button"
+                    onClick={handlePostular}
+                    className="w-full rounded-xl bg-emerald-700 px-6 py-4 text-base font-bold text-white shadow-sm transition hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-700/20 active:scale-[0.99]"
+                  >
+                    Postular ahora
+                  </button>
+                ) : (
+                  <></>
+                )}
 
                 <p className="mt-3 text-center text-xs leading-5 text-slate-500">
                   Verifica que cuentas con todos los documentos solicitados

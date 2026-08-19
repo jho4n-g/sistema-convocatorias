@@ -87,7 +87,7 @@ export default function LoginPage() {
               </div>
 
               <p className="text-2xl font-bold tracking-[0.18em] text-white">
-                CAJA NACIONAL DE SALUD
+                CAJA NACIONAL DE SALUD - REGIONAL COCHABAMBA
               </p>
             </div>
 
@@ -133,7 +133,7 @@ export default function LoginPage() {
             </div>
 
             <p className="text-xl font-bold tracking-[0.14em] text-emerald-900">
-              CONVOCA
+              SISTEMA DE GESTION DE CONVOCATORIAS
             </p>
           </div>
 

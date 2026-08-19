@@ -61,4 +61,20 @@ export class ConvocatoriaController {
       data,
     });
   }
+
+  //*****************************************+ */
+  //Parche 18-08-2026
+  static async getIdTitulo(req, res) {
+    const { id } = req.params;
+    let idNumber = Number(id);
+    if (isNaN(idNumber) || !Number.isInteger(idNumber)) {
+      throw new Error('El id no es un numero entero');
+    }
+    const data = await services.getIdTitulo(idNumber);
+    return res.status(200).json({
+      ok: true,
+      message: 'Convocatoria obtenida correctamente',
+      data,
+    });
+  }
 }

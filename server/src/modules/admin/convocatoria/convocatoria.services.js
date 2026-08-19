@@ -678,4 +678,30 @@ export class ConvocatoriaServices {
       return ConvocatoriaReload;
     });
   }
+
+  //------------------------------------------------------------------
+  //parche 18/08/2026
+
+  static async getIdTitulo(id) {
+    const dataId = await convocatoriaModel.findByPk(id, {
+      attributes: [
+        'titulo_cargo',
+        [col('cargoInstitucionalC.nombre_cargo'), 'cargo_institucional'],
+      ],
+      include: [
+        {
+          model: cargoInstitucionalModel,
+          as: 'cargoInstitucionalC',
+          attributes: [],
+        },
+      ],
+    });
+    if (!dataId) {
+      const err = new Error('No se encontró la convocatoria');
+      err.statusCode = 404;
+      throw err;
+    }
+
+    return dataId;
+  }
 }

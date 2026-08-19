@@ -3,7 +3,7 @@ import { normalizeApiError } from './error';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api_v1',
-  //baseURL: '/api_v1',
+  // baseURL: '/api_v1',
   timeout: 120000,
 });
 

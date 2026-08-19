@@ -25,6 +25,17 @@ export class VerPostulante {
     }
   }
 
+  static async getIdTituloConvocatoria(id) {
+    try {
+      const response = await api.get(
+        `/admin/ver-postulantes/convocatoria/${id}`,
+      );
+      return response.data;
+    } catch (e) {
+      return toServiceError(e);
+    }
+  }
+
   static async verDocumento(id) {
     try {
       const response = await api.get(`/usuario/documentos/ver/${id}`, {

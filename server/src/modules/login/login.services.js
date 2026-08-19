@@ -23,7 +23,10 @@ export class LoginServices {
       throw err;
     }
 
-    const isValido = bcrypt.compare(contrasenia, usuarioSearch.contrasenia);
+    const isValido = await bcrypt.compare(
+      contrasenia,
+      usuarioSearch.contrasenia,
+    );
 
     if (!isValido) {
       const err = new Error('Credenciales incorrectas');
