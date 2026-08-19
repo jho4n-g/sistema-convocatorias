@@ -60,27 +60,6 @@ export default function ConvocatoriaDetallePage() {
             response?.message || 'No se pudo cargar la convocatoria',
           );
         }
-        console.log('***************************');
-        console.log(response.data.fecha_cierre);
-        console.log(
-          convertirFechaEspañol(response.data.fecha_cierre).setHours(
-            0,
-            0,
-            0,
-            0,
-          ),
-        );
-        console.log(hoy.setHours(0, 0, 0, 0));
-
-        console.log(
-          convertirFechaEspañol(response.data.fecha_cierre).setHours(
-            0,
-            0,
-            0,
-            0,
-          ) <= hoy.setHours(0, 0, 0, 0),
-        );
-        console.log('***************************');
 
         setConvocatoria(response.data);
       } catch (error) {
