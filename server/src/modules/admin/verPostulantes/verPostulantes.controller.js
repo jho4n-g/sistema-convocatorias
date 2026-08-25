@@ -20,7 +20,6 @@ export class VerPostulantesController {
         : '';
 
     const result = await VerPostulantesServices.getAll(id, page, limit, search);
-
     return res.status(200).json({
       ok: true,
       message: 'Postulantes obtenidas correctamente',
@@ -39,6 +38,21 @@ export class VerPostulantesController {
       ok: true,
       message: 'Postulante obtenido correctamente',
       data,
+    });
+  }
+  //agregar
+  static async revisar(req, res, next) {
+    const { id } = req.params;
+    const payload = req.body;
+    let idNumber = Number(id);
+    if (isNaN(idNumber) || !Number.isInteger(idNumber)) {
+      throw new Error('El id no es un numero entero');
+    }
+    await VerPostulantesServices.revisar(id, payload);
+
+    return res.status(200).json({
+      ok: true,
+      message: 'Se cambio correctamente el postulante',
     });
   }
 }

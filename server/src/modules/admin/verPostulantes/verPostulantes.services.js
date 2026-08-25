@@ -1,4 +1,4 @@
-import { Op, col, fn, where as sequelizeWhere } from 'sequelize';
+import { Op, col, fn, where as sequelizeWhere, literal } from 'sequelize';
 import { convocatoriaModel } from '../../../models/convocatoria.model.js';
 import { potulacionModel } from '../../../models/postulacion.model.js';
 import { personaModel } from '../../../models/persona.model.js';
@@ -85,6 +85,7 @@ export class VerPostulantesServices {
         [col('personaPostulacion.apellido_materno'), 'apellido_materno'],
         [col('personaPostulacion.correo'), 'correo'],
         [col('personaPostulacion.numero_celular'), 'numero_celular'],
+        'estado',
       ],
 
       where,
@@ -100,8 +101,22 @@ export class VerPostulantesServices {
 
       limit,
       offset,
-
-      order: [['id', 'DESC']],
+      //aumente esto aumentar literal
+      order: [
+        [
+          literal(`
+        CASE
+          WHEN estado = 'ENVIADO' THEN 1
+          WHEN estado = 'OBSERVADO' THEN 2
+          WHEN estado = 'APROBADO' THEN 3
+          ELSE 4
+        END
+      `),
+          'ASC',
+        ],
+        ['id', 'DESC'],
+      ],
+      //aumente esto
     });
 
     return {
@@ -213,5 +228,28 @@ export class VerPostulantesServices {
       experienciaLaboral: experienciaLaboralSearch,
       documentos: documetosUser,
     };
+  }
+  //agregar litelral
+  static async revisar(id, payload) {
+    const postulacionSearch = await potulacionModel.findByPk(id);
+    if (!postulacionSearch) {
+      const err = new Error('No se econtro postulante');
+      err.statusCode = 404;
+      throw err;
+    }
+    const { estado } = payload;
+
+    const valoresPermitidos = ['APROBADO', 'OBSERVADO'];
+
+    if (!valoresPermitidos.includes(estado)) {
+      const error = new Error(
+        `Estado inválido. Valores permitidos: ${valoresPermitidos.join(', ')}`,
+      );
+      error.status = 400;
+      throw error;
+    }
+
+    await postulacionSearch.update({ estado });
+    return;
   }
 }

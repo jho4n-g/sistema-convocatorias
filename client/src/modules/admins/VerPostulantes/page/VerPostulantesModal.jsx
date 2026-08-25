@@ -9,8 +9,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { VerPostulante as Serv } from '../verPostulantes.services';
+import RevisasPostulante from './RevisasPostulante';
 
-export default function VerPostulanteModal({ open, id, onClose }) {
+export default function VerPostulanteModal({ open, id, onClose, reload }) {
   const [form, setForm] = useState(null);
   const [dataTabla, setDataTable] = useState([]);
   const [dataFA, setDataFA] = useState([]);
@@ -20,6 +21,8 @@ export default function VerPostulanteModal({ open, id, onClose }) {
   const [documentoUrl, setDocumentoUrl] = useState(null);
   const [documentoNombre, setDocumentoNombre] = useState('');
   const [loadingDocumento, setLoadingDocumento] = useState(false);
+
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const verDocumento = async (documento) => {
     try {
@@ -200,6 +203,26 @@ export default function VerPostulanteModal({ open, id, onClose }) {
 
   if (!open) return null;
 
+  const handleSaved = async (payload) => {
+    try {
+      setLoading(true);
+      const respose = await Serv.revisar(id, payload);
+      if (!respose?.ok) {
+        throw new Error(respose.message || 'No se pudo actualizar estado');
+      }
+      toast.success(
+        respose.message ||
+          'Se guardo correctamente el estado de la postulacion',
+      );
+      setOpenConfirm(false);
+      onClose();
+      reload();
+    } catch (e) {
+      toast.error(e.message || 'No se pudo guardar el estado del postulante');
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -336,7 +359,26 @@ export default function VerPostulanteModal({ open, id, onClose }) {
           </div>
           {/* FOOTER */}
           <div className="shrink-0 border-t border-slate-200 bg-slate-50 px-6 py-4">
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setOpenConfirm(true);
+                }}
+                disabled={loading}
+                className="
+                  rounded-xl
+                  bg-emerald-700
+                  px-5 py-2.5
+                  font-medium
+                  text-white
+                  transition
+                  hover:bg-emerald-800
+                  disabled:opacity-50
+                "
+              >
+                REVISAR
+              </button>
               <button
                 type="button"
                 onClick={onClose}
@@ -442,6 +484,15 @@ export default function VerPostulanteModal({ open, id, onClose }) {
           </div>
         </div>
       )}
+
+      <RevisasPostulante
+        open={openConfirm}
+        onClose={() => {
+          setOpenConfirm(false);
+        }}
+        onConfirm={handleSaved}
+        loading={loading}
+      />
     </>
   );
 }

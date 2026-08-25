@@ -39,6 +39,28 @@ export class PersonaServices {
         err.statusCode = 404;
         throw err;
       }
+
+      const ahora = new Date();
+
+      const fechaPublicacion = new Date(convocatoriaSearch.fecha_publicacion);
+      const fechaCierre = new Date(convocatoriaSearch.fecha_cierre);
+
+      if (ahora < fechaPublicacion) {
+        const error = new Error(
+          'La convocatoria todavía no está habilitada para postulaciones',
+        );
+        error.statusCode = 403;
+        throw error;
+      }
+
+      if (ahora > fechaCierre) {
+        const error = new Error(
+          'El periodo de postulación de esta convocatoria ha finalizado',
+        );
+        error.statusCode = 403;
+        throw error;
+      }
+
       //_______________PERSONA_______________________________________________
       const cedulaExit = await personaModel.findOne({
         where: {

@@ -5,6 +5,8 @@ export class ConvocatoriaController {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
 
+    const usuario = req.usuario;
+
     let search = req.query.search;
 
     search =
@@ -12,13 +14,37 @@ export class ConvocatoriaController {
         ? search.trim()
         : '';
 
-    const result = await services.getAll(page, limit, search);
+    //******************************************* */
 
-    return res.status(200).json({
-      ok: true,
-      message: 'Convocatorias obtenidas correctamente',
-      ...result,
-    });
+    if (usuario.nombre_rol === 'admin_super_admin') {
+      const result = await services.getAll(page, limit, search);
+
+      return res.status(200).json({
+        ok: true,
+        message: 'Convocatorias obtenidas correctamente',
+        ...result,
+      });
+    } else {
+      const result = await services.getAll(
+        page,
+        limit,
+        search,
+        usuario.servicio_id,
+      );
+
+      return res.status(200).json({
+        ok: true,
+        message: 'Convocatorias obtenidas correctamente',
+        ...result,
+      });
+    }
+    // const result = await services.getAll(page, limit, search);
+
+    // return res.status(200).json({
+    //   ok: true,
+    //   message: 'Convocatorias obtenidas correctamente',
+    //   ...result,
+    // });
   }
   static async getId(req, res) {
     const { id } = req.params;

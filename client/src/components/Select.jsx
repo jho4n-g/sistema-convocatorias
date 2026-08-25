@@ -10,7 +10,7 @@ export default function SelectComponent({
   error,
   isDisabled = false,
 }) {
-  const selectedOption = options.find((op) => op.value === value) || null;
+  const selectedOption = options?.find((op) => op.value === value) || null;
 
   const handleChange = (option) => {
     onChange({

@@ -31,8 +31,15 @@ export const potulacionModel = sequelize.define(
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
+    //Parcheee
     estado: {
-      type: DataTypes.ENUM('ENVIADO', 'EN_REVISION', 'REVISADO'),
+      type: DataTypes.ENUM(
+        'ENVIADO',
+        'EN_REVISION',
+        'REVISADO',
+        'APROBADO',
+        'OBSERVADO',
+      ),
       defaultValue: 'ENVIADO',
     },
   },

@@ -32,6 +32,7 @@ import UsuarioNormalRoute from './routes/UsuarioNormalRoute';
 import MisPostulaciones from './modules/usuarioNormal/misPostulaciones/pages/MisPostulacionesPage';
 
 //
+import NotFoundPage from './NotFound/NotFoundPage';
 
 import PermissionRoute from './routes/PermissionRoute';
 function App() {
@@ -133,6 +134,8 @@ function App() {
           </Route>
         </Route>
         {/* ================= PRIVADAS ================= */}
+        {/* ================= 404 ================= */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

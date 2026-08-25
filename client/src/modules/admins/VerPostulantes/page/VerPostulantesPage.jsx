@@ -53,6 +53,10 @@ export default function VerPostulantePage() {
         header: 'CELULAR',
       },
       {
+        accessorKey: 'estado',
+        header: 'ESTADO',
+      },
+      {
         id: 'acciones',
         accessorKey: 'acciones',
         header: 'ACCIONES',
@@ -66,15 +70,6 @@ export default function VerPostulantePage() {
               }}
             >
               VER POSTULANTE
-            </button>
-            <button
-              type="button"
-              className="rounded-xl bg-emerald-800 px-3 py-2 text-white hover:bg-emerald-900 border border-emerald-500"
-              onClick={() => {
-                openModal(MODALS.VIEW, row.original.id);
-              }}
-            >
-              CAMBIAR ESTADO
             </button>
           </div>
         ),
@@ -229,6 +224,7 @@ export default function VerPostulantePage() {
         id={modalState.data}
         onClose={closeModal}
         open={isModalOpen(MODALS.VIEW)}
+        reload={fetchFilas}
       />
     </>
   );

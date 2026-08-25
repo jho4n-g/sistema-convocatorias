@@ -24,7 +24,17 @@ export class VerPostulante {
       return toServiceError(e);
     }
   }
-
+  static async revisar(id, payload) {
+    try {
+      const response = await api.patch(
+        `/admin/ver-postulantes/revisar/${id}`,
+        payload,
+      );
+      return response.data;
+    } catch (e) {
+      return toServiceError(e);
+    }
+  }
   static async getIdTituloConvocatoria(id) {
     try {
       const response = await api.get(
@@ -35,7 +45,6 @@ export class VerPostulante {
       return toServiceError(e);
     }
   }
-
   static async verDocumento(id) {
     try {
       const response = await api.get(`/usuario/documentos/ver/${id}`, {

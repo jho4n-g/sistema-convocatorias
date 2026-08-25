@@ -19,7 +19,7 @@ import { centroMedicoModel } from '../../../models/centroMedico.model.js';
 import { convertirFechaATexto } from '../../../utils/funciones.js';
 
 export class ConvocatoriaServices {
-  static async getAll(page = 1, limit = 10, search = '') {
+  static async getAll(page = 1, limit = 10, search = '', servicio_id = null) {
     page = Number(page) || 1;
     limit = Number(limit) || 10;
 
@@ -27,6 +27,10 @@ export class ConvocatoriaServices {
 
     search = search?.trim() || '';
     let where = {};
+
+    if (servicio_id) {
+      where.servicio_revisor_id = servicio_id;
+    }
 
     if (search) {
       where[Op.or] = [
