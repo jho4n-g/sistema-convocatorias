@@ -39,28 +39,73 @@ export class PersonaServices {
         err.statusCode = 404;
         throw err;
       }
+      //*********************++++ */
+      const ahora = Date.now();
 
-      const ahora = new Date();
+      const obtenerFechaBolivia = (fecha, sumarDias = 0) => {
+        const fechaRaw = new Date(fecha);
 
-      const fechaPublicacion = new Date(convocatoriaSearch.fecha_publicacion);
-      const fechaCierre = new Date(convocatoriaSearch.fecha_cierre);
+        if (Number.isNaN(fechaRaw.getTime())) {
+          return NaN;
+        }
+
+        // Obtener el día calendario en Bolivia
+        const partes = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/La_Paz',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        }).formatToParts(fechaRaw);
+
+        const valores = Object.fromEntries(
+          partes
+            .filter((parte) => ['year', 'month', 'day'].includes(parte.type))
+            .map((parte) => [parte.type, Number(parte.value)]),
+        );
+
+        // Bolivia es UTC-4.
+        // 00:00 Bolivia = 04:00 UTC.
+        return Date.UTC(
+          valores.year,
+          valores.month - 1,
+          valores.day + sumarDias,
+          4,
+          0,
+          0,
+          0,
+        );
+      };
+
+      const fechaPublicacion = obtenerFechaBolivia(
+        convocatoriaSearch.fecha_publicacion,
+      );
+
+      const fechaCierre = obtenerFechaBolivia(
+        convocatoriaSearch.fecha_cierre,
+        1,
+      );
+
+      if (Number.isNaN(fechaPublicacion) || Number.isNaN(fechaCierre)) {
+        const err = new Error('Las fechas de la convocatoria no son válidas');
+        err.statusCode = 500;
+        throw err;
+      }
 
       if (ahora < fechaPublicacion) {
-        const error = new Error(
+        const err = new Error(
           'La convocatoria todavía no está habilitada para postulaciones',
         );
-        error.statusCode = 403;
-        throw error;
+        err.statusCode = 403;
+        throw err;
       }
 
-      if (ahora > fechaCierre) {
-        const error = new Error(
+      if (ahora >= fechaCierre) {
+        const err = new Error(
           'El periodo de postulación de esta convocatoria ha finalizado',
         );
-        error.statusCode = 403;
-        throw error;
+        err.statusCode = 403;
+        throw err;
       }
-
       //_______________PERSONA_______________________________________________
       const cedulaExit = await personaModel.findOne({
         where: {

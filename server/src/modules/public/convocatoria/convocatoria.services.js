@@ -11,6 +11,21 @@ import {
 } from '../../../models/formacionAcademica.model.js';
 import { experienciaEspecifica } from '../../../models/experienciaEspecifica.model.js';
 import { col, Op } from 'sequelize';
+
+const formatDateOnlyText = (value) => {
+  if (!value) return '';
+
+  const date = value instanceof Date ? value : new Date(value);
+
+  const fecha = new Intl.DateTimeFormat('es-BO', {
+    timeZone: 'America/La_Paz',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
+
+  return fecha.charAt(0).toUpperCase() + fecha.slice(1);
+};
 export class ConvocatoriaServices {
   static async getAll(page = 1, limit = 10, search = '') {
     page = Number(page) || 1;
@@ -74,8 +89,8 @@ export class ConvocatoriaServices {
 
     const dataNomr = rows.map((row) => ({
       ...row.toJSON(),
-      fecha_publicacion: convertirFechaATexto(row.fecha_publicacion),
-      fecha_cierre: convertirFechaATexto(row.fecha_cierre),
+      fecha_publicacion: formatDateOnlyText(row.fecha_publicacion),
+      fecha_cierre: formatDateOnlyText(row.fecha_cierre),
     }));
     return {
       total: count,
@@ -148,8 +163,8 @@ export class ConvocatoriaServices {
       }),
     );
 
-    result.fecha_publicacion = convertirFechaATexto(result.fecha_publicacion);
-    result.fecha_cierre = convertirFechaATexto(result.fecha_cierre);
+    result.fecha_publicacion = formatDateOnlyText(result.fecha_publicacion);
+    result.fecha_cierre = formatDateOnlyText(result.fecha_cierre);
 
     return result;
   }

@@ -158,7 +158,6 @@ export default function MisPostulacionesModal({ open, id, onClose }) {
             response.message || 'No se pudo cargar la convocatoria',
           );
         }
-        console.log(response);
 
         setForm(response.data.data);
         setFormPersona(response.data.persona);

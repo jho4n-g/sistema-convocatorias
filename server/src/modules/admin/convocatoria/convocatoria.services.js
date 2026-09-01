@@ -17,6 +17,23 @@ import { col, Op } from 'sequelize';
 import { areaTrabajoModel } from '../../../models/areaTrabajo.model.js';
 import { centroMedicoModel } from '../../../models/centroMedico.model.js';
 import { convertirFechaATexto } from '../../../utils/funciones.js';
+//****************************** */
+const formatDateOnlyText = (value) => {
+  if (!value) return '';
+
+  const date = value instanceof Date ? value : new Date(value);
+
+  const fecha = new Intl.DateTimeFormat('es-BO', {
+    timeZone: 'America/La_Paz',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
+
+  return fecha.charAt(0).toUpperCase() + fecha.slice(1);
+};
+
+//****************************** */
 
 export class ConvocatoriaServices {
   static async getAll(page = 1, limit = 10, search = '', servicio_id = null) {
@@ -96,8 +113,8 @@ export class ConvocatoriaServices {
 
     const dataNomr = rows.map((row) => ({
       ...row.toJSON(),
-      fecha_publicacion: convertirFechaATexto(row.fecha_publicacion),
-      fecha_cierre: convertirFechaATexto(row.fecha_cierre),
+      fecha_publicacion: formatDateOnlyText(row.fecha_publicacion),
+      fecha_cierre: formatDateOnlyText(row.fecha_cierre),
     }));
     return {
       total: count,
@@ -170,15 +187,27 @@ export class ConvocatoriaServices {
     const data = dataId.toJSON();
     // return data;
 
+    //*********************************************++ */
+    //agregaro esto mas
     const formatDateOnly = (value) => {
       if (!value) return '';
 
-      if (value instanceof Date) {
-        return value.toISOString().split('T')[0];
+      if (typeof value === 'string') {
+        return value.substring(0, 10);
       }
 
-      return String(value).split('T')[0];
+      if (value instanceof Date) {
+        return new Intl.DateTimeFormat('en-CA', {
+          timeZone: 'America/La_Paz',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        }).format(value);
+      }
+
+      return '';
     };
+    //*********************************************++ */
 
     return {
       ...data,
